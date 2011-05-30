@@ -1,6 +1,7 @@
 section#meal_section
   h2 Meals
-  .meal_entry
+  form(method: 'post', action: '/' + planid).meal_entry
+    input(type: 'submit', value: 'update').meal_update
     section.meal_wrapper
       section.meal_day
         h3 Monday
