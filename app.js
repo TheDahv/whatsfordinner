@@ -28,10 +28,29 @@ app.configure('production', function(){
 });
 
 // Routes
+app.get('/:id', function(req, res) {
+  var planid = req.params.id;
+  res.render('planner', {
+    title: 'What&apos;s For Dinner?'    
+  });
+});
 
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Express'
+    title: 'What&apos;s For Dinner?',
+    locals: {
+      planid: null
+    }
+  });
+});
+
+app.post('/', function(req, res) {
+  var planid = 12345;
+  res.render('index', {
+    title: 'What&apos;s For Dinner?',
+    locals: {
+      planid: planid
+    }
   });
 });
 

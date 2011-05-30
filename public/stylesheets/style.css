@@ -121,6 +121,13 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+input[type="text"],
+textarea {
+  border: 0;
+}
+p {
+  margin: 11px 0;
+}
 @font-face {
   font-family: "Permanent Marker";
   src: url("fonts/Permanent_Marker/PermanentMarker.ttf");
@@ -179,10 +186,14 @@ header {
   padding: 12.979px 8.022px;
   height: 159.47px;
 }
-main {
+#main {
+  padding: 47.25px 0;
   text-align: left;
   width: 960px;
   margin: 0 auto;
+}
+.start_planning {
+  text-align: center;
 }
 .meal_entry {
   text-align: center;
@@ -193,11 +204,14 @@ main {
   margin: 0 auto;
   display: inline-block;
 }
+.meal_wrapper br {
+  clear: both;
+}
 .meal_day,
 .ingredients_section {
   height: auto;
   width: 239.205px;
-  flat: left;
+  float: left;
   margin: 14px 21px;
 }
 .meal_day h3,
@@ -209,6 +223,7 @@ main {
 .meal_day input,
 .ingredients_section input {
   margin-top: 6.222px;
+  padding: 4px 2px;
   width: 140px;
   float: right;
   font-family: "Molengo", Helvetica, Arial, sans-serif;
@@ -218,5 +233,5 @@ main {
   overflow-y: hidden;
   width: 233px;
   height: 159.47px;
-  font-faimly: "Molengo", Helvetica, Arial, sans-serif;
+  font-family: "Molengo", Helvetica, Arial, sans-serif;
 }

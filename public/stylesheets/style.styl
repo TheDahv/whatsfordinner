@@ -44,6 +44,15 @@ table
   border-collapse collapse
   border-spacing 0
 
+input[type='text'], textarea
+  border 0
+
+/** Layout Stuff **/
+p 
+  margin 11px 0
+
+/** End Layout Stuff **/
+
 /** Font Stuff **/
 /** Font-scale: http://modularscale.com/scale/?px1=21&px2=&ra1=1.5&ra2=0 **/
 
@@ -119,10 +128,14 @@ header
   padding 12.979px 8.022px
   height: 159.47px
 
-main
+#main  
+  padding secondstep 0
   text-align left
   width 960px
   margin 0 auto
+
+.start_planning
+  text-align center
 
 .meal_entry
   text-align center
@@ -132,18 +145,21 @@ main
   width auto
   margin 0 auto
   display inline-block
+  br
+    clear both
 
 .meal_day, .ingredients_section
   height auto
   width 239.205px
-  flat left
+  float left
   margin 14px 21px
   h3
     display inline-block
     font-size 16px
     padding 6.222px 4.11px
-  input
+  input    
     margin-top 6.222px
+    padding 4px 2px
     width 140px
     float right
     font-family 'Molengo', Helvetica, Arial, sans-serif
@@ -151,5 +167,4 @@ main
     overflow-y hidden
     width 233px
     height 159.47px
-    font-faimly 'Molengo', Helvetica, Arial, sans-serif
-  
+    font-family 'Molengo', Helvetica, Arial, sans-serif
