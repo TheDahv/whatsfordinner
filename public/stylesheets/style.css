@@ -86,3 +86,137 @@ video {
   font: inherit;
   vertical-align: baseline;
 }
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+@font-face {
+  font-family: "Permanent Marker";
+  src: url("fonts/Permanent_Marker/PermanentMarker.ttf");
+}
+@font-face {
+  font-family: "Molengo";
+  src: url("fonts/Molengo/Molengo-Regular.ttf");
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Permanent Marker", arial, serif;
+}
+body {
+  font-size: 21px;
+  font-family: "Molengo", Helvetica, arial, sans-serif;
+}
+h1 {
+  font-size: 70.875px;
+  padding: 8.022px 4.958px;
+}
+h2 {
+  font-size: 47.25px;
+  padding: 8.022px 4.958px;
+}
+h3 {
+  font-size: 21px;
+  padding: 6.222px 6.222px;
+}
+h4 {
+  font-size: 14px;
+  padding: 6.222px 6.222px;
+}
+body {
+  background-color: #dedede;
+}
+header {
+  background-color: #af977d;
+  -moz-box-shadow: 0px 2px 1px #f7cd25;
+  box-shadow: 0px 2px 1px #f7cd25;
+}
+header h1 {
+  color: #fff;
+  text-shadow: 1px 2px 2px #97abb4;
+  filter: dropshadow(#97abb4, 1, 2);
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  text-align: center;
+}
+header {
+  padding: 12.979px 8.022px;
+  height: 159.47px;
+}
+main {
+  text-align: left;
+  width: 960px;
+  margin: 0 auto;
+}
+.meal_entry {
+  text-align: center;
+}
+.meal_wrapper {
+  clear: both;
+  width: auto;
+  margin: 0 auto;
+  display: inline-block;
+}
+.meal_day,
+.ingredients_section {
+  height: auto;
+  width: 239.205px;
+  flat: left;
+  margin: 14px 21px;
+}
+.meal_day h3,
+.ingredients_section h3 {
+  display: inline-block;
+  font-size: 16px;
+  padding: 6.222px 4.11px;
+}
+.meal_day input,
+.ingredients_section input {
+  margin-top: 6.222px;
+  width: 140px;
+  float: right;
+  font-family: "Molengo", Helvetica, Arial, sans-serif;
+}
+.meal_day textarea,
+.ingredients_section textarea {
+  overflow-y: hidden;
+  width: 233px;
+  height: 159.47px;
+  font-faimly: "Molengo", Helvetica, Arial, sans-serif;
+}

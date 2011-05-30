@@ -45,7 +45,13 @@ table
   border-spacing 0
 
 /** Font Stuff **/
-/* Font-scale: http://modularscale.com/scale/?px1=21&px2=&ra1=1.618&ra2=0 */
+/** Font-scale: http://modularscale.com/scale/?px1=21&px2=&ra1=1.5&ra2=0 **/
+
+basesize = 21px
+firststep = 31.5px
+secondstep = 47.25px
+thirdstep = 70.875px
+substep = 14px
 
 @font-face {
   font-family: 'Permanent Marker';
@@ -56,3 +62,94 @@ table
   font-family: 'Molengo';
   src: url('fonts/Molengo/Molengo-Regular.ttf');
 }
+
+h1, h2, h3, h4
+  font-family 'Permanent Marker', arial, serif
+
+body
+  font-size 21px
+  font-family 'Molengo', Helvetica, arial, sans-serif
+
+h1
+  font-size thirdstep
+  padding 8.022px 4.958px
+h2
+  font-size secondstep
+  padding 8.022px 4.958px
+
+h3
+  font-size basesize
+  padding 6.222px 6.222px
+
+h4
+  font-size 14px
+  padding 6.222px 6.222px  
+
+/** End Font Stuff **/
+
+/** Color Stuff **/
+yellow = #f7cd25
+darkbrown = #69372c
+grocerybagbrown = #af977d
+lightgrey = #dedede
+lightblue = #97abb4
+
+body
+  background-color lightgrey
+
+header
+  background-color grocerybagbrown
+
+  -moz-box-shadow 0px 2px 1px yellow
+  box-shadow 0px 2px 1px yellow
+
+header h1
+  color #fff
+  text-shadow 1px 2px 2px lightblue
+  filter: dropshadow(color=lightblue, offx=1, offy=2)
+/** End Color Stuff **/
+
+html, body
+  height 100%
+
+body
+  text-align center
+
+header
+  padding 12.979px 8.022px
+  height: 159.47px
+
+main
+  text-align left
+  width 960px
+  margin 0 auto
+
+.meal_entry
+  text-align center
+
+.meal_wrapper
+  clear both
+  width auto
+  margin 0 auto
+  display inline-block
+
+.meal_day, .ingredients_section
+  height auto
+  width 239.205px
+  flat left
+  margin 14px 21px
+  h3
+    display inline-block
+    font-size 16px
+    padding 6.222px 4.11px
+  input
+    margin-top 6.222px
+    width 140px
+    float right
+    font-family 'Molengo', Helvetica, Arial, sans-serif
+  textarea
+    overflow-y hidden
+    width 233px
+    height 159.47px
+    font-faimly 'Molengo', Helvetica, Arial, sans-serif
+  
