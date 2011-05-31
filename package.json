@@ -1,8 +1,11 @@
 {
-    "name": "application-name"
+    "name": "whatsfordinner"
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
-    "jade": ">= 0.0.1"
+    "jade": ">= 0.0.1",
+    "express": ">= 2.3.10",
+    "mongoose": ">= 1.0.0",
+    "stylus": ">= 0.13.0"
   }
 }
