@@ -105,12 +105,13 @@ var updateDay = function (req, plan, day) {
   meal.name = req.body[day].name;
 
   if (req.body[day].ingredients.length > 0) {
-    var flat_ingredients, split_ingredients;
-    flat_ingredients = req.body[day].ingredients.replace(/\n/g, ',');
+    var trimmed, flat_ingredients, split_ingredients;
+    trimmed = req.body[day].ingredients.trim();
+    flat_ingredients = trimmed.replace(/\r\n|\r|\n/gm, ',');
     split_ingredients = flat_ingredients.split(',');
 
     split_ingredients.forEach(function (ingredient) {
-      if (ingredient !== '') {
+      if (ingredient.trim().length) {
         meal.ingredients.push({
           name: ingredient.trim()
         });
