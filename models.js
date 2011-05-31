@@ -12,18 +12,31 @@ var defineModels = function (mongoose, fn) {
   });
 
   Meal = new Schema({
+    day         : String,
     name        : String,
     ingredients : [Ingredient]
   });
 
   Plan = new Schema({
-    day   : String,
     meals : [Meal]
   });
 
-
-  mongoose.model('Ingredient', Ingredient);
-  mongoose.model('Meal', Meal);
+  Plan.virtual('id')
+    .get(function() {
+      return this._id.toHexString();
+    });
+  
+  Plan.method('findMealByDay', function (day) {
+    var meal = null, i;
+    for(i = 0; i < this.meals.length; i += 1) {
+      if (this.meals[i].day === day) {
+        meal = this.meals[i];
+        break;
+      }      
+    }
+    return meal;
+  });
+  
   mongoose.model('Plan', Plan);
 
   fn();

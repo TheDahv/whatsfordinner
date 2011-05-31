@@ -1,67 +1,74 @@
 section#meal_section
   h2 Meals
   form(method: 'post', action: '/' + planid).meal_entry
-    input(type: 'submit', value: 'update').meal_update
+    input(type: 'submit', value: 'save').meal_update
     section.meal_wrapper
       section.meal_day
         h3 Monday
-        input(type: 'text', placeholder: 'Dish')
+        input(type: 'text', placeholder: 'Dish', name: 'monday[name]', value: viewdata['monday'].name)
         br
-        textarea(placeholder: 'Ingredients')
+        textarea(placeholder: 'Ingredients', name: 'monday[ingredients]')
+          #{ viewdata['monday'].ingredients }
       section.meal_day
         h3 Tuesday
-        input(type: 'text', placeholder: 'Dish')
+        input(type: 'text', placeholder: 'Dish', name: 'tuesday[name]', value: viewdata['tuesday'].name)
         br
-        textarea(placeholder: 'Ingredients')  
+        textarea(placeholder: 'Ingredients', name: 'tuesday[ingredients]')
+          #{ viewdata['tuesday'].ingredients }
       br
     section.meal_wrapper
       section.meal_day
         h3 Wednesday
-        input(type: 'text', placeholder: 'Dish')
+        input(type: 'text', placeholder: 'Dish', name: 'wednesday[name]', value: viewdata['wednesday'].name)
         br
-        textarea(placeholder: 'Ingredients')  
+        textarea(placeholder: 'Ingredients', name: 'wednesday[ingredients]')
+           #{ viewdata['wednesday'].ingredients }
       section.meal_day
         h3 Thursday
-        input(type: 'text', placeholder: 'Dish')
+        input(type: 'text', placeholder: 'Dish', name: 'thursday[name]', value: viewdata['thursday'].name)
         br
-        textarea(placeholder: 'Ingredients')  
+        textarea(placeholder: 'Ingredients', name: 'thursday[ingredients]')
+          #{ viewdata['thursday'].ingredients }
       section.meal_day
         h3 Friday
-        input(type: 'text', placeholder: 'Dish')
+        input(type: 'text', placeholder: 'Dish', name: 'friday[name]', value: viewdata['friday'].name)
         br
-        textarea(placeholder: 'Ingredients')  
+        textarea(placeholder: 'Ingredients', name: 'friday[ingredients]')
+          #{ viewdata['friday'].ingredients }
       br
     section.meal_wrapper
       section.meal_day
         h3 Saturday
-        input(type: 'text', placeholder: 'Dish')
+        input(type: 'text', placeholder: 'Dish', name: 'saturday[name]', value: viewdata['saturday'].name)
         br
-        textarea(placeholder: 'Ingredients')  
+        textarea(placeholder: 'Ingredients', name: 'saturday[ingredients]')
+          #{ viewdata['saturday'].ingredients }
       section.meal_day
         h3 Sunday
-        input(type: 'text', placeholder: 'Dish')
+        input(type: 'text', placeholder: 'Dish', name: 'sunday[name]', value: viewdata['sunday'].name)
         br
-        textarea(placeholder: 'Ingredients')  
+        textarea(placeholder: 'Ingredients', name: 'sunday[ingredients]')
+          #{ viewdata['sunday'].ingredients }
       br
   section#ingredients
     h2 Shopping List
     section.ingredients_section
       h3 Produce
-      textarea
+      textarea(name: 'shoppinglist[produce]')
     section.ingredients_section
       h3 Meat
-      textarea
+      textarea(name: 'shoppinglist[meat]')
     section.ingredients_section
       h3 Frozen
-      textarea
+      textarea(name: 'shoppinglist[frozen]')
     section.ingredients_section
       h3 Dairy
-      textarea
+      textarea(name: 'shoppinglist[dairy]')
     section.ingredients_section
       h3 Canned
-      textarea
+      textarea(name: 'shoppinglist[canned]')
     section.ingredients_section
       h3 Miscellaneous
-      textarea
+      textarea(name: 'shoppinglist[miscellaneous]')
       
   br(style: 'clear: both')
