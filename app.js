@@ -96,10 +96,8 @@ var updateDay = function (req, plan, day) {
     };
     plan.meals.push(meal);
   } else {    
-    while(meal.ingredients.length > 0) {
-      meal.ingredients = [];
-      plan.save();
-    }
+    meal.ingredients = [];
+    plan.save();
   }
 
   meal.name = req.body[day].name;
