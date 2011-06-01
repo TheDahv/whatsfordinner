@@ -45,7 +45,8 @@ app.configure('test', function() {
 });
 
 app.configure('production', function() {
-  var connStr = process.env.MONGOHQ_URL || 'mongodb://localhost/whatsfordinner'; 
+  var connStr = process.env.MONGOHQ_URL || 'mongodb://localhost/whatsfordinner';
+  console.log('connStr is: ' + connStr); 
   app.set('db-uri', connStr);
 });
 
