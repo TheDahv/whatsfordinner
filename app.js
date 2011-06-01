@@ -59,6 +59,7 @@ models.defineModels(mongoose, function () {
 // Routes
 app.get('/:id', function (req, res) {
   var planid = req.params.id;
+  console.log('looking up the plan for id: ' + planid);
   
   Plan.findById(planid, function (err, plan) {
     if(err) {
