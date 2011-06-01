@@ -37,16 +37,17 @@ app.configure('production', function(){
 });
 
 app.configure('development', function() {
-  app.set('db-uri', 'mongodb://localhost/whatsfordinner-dev');
+  var connStr = process.env.MONGOHQ_URL || 'mongodb://localhost/whatsfordinner-dev';
+  app.set('db-uri', connStr);
 });
 
 app.configure('test', function() {
-  app.set('db-uri', 'mongodb://localhost/whatsfordinner-test');
+  var connStr = process.env.MONGOHQ_URL || 'mongodb://localhost/whatsfordinner-test';
+  app.set('db-uri', connStr);
 });
 
 app.configure('production', function() {
-  var connStr = process.env.MONGOHQ_URL || 'mongodb://localhost/whatsfordinner';
-  console.log('connStr is: ' + connStr); 
+  var connStr = process.env.MONGOHQ_URL || 'mongodb://localhost/whatsfordinner'; 
   app.set('db-uri', connStr);
 });
 
