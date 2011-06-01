@@ -1,3 +1,4 @@
 .monitor
 .nodemonignore
 node_modules
+pids

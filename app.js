@@ -122,6 +122,7 @@ var updateDay = function (req, plan, day) {
 app.post('/:id', function (req, res) {
   var planid = req.params.id;
 
+  
   Plan.findById(planid, function (err, plan) {
     if(err) {
       res.render('error', { locals: { error: err } });
