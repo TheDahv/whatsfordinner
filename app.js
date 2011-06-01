@@ -50,6 +50,7 @@ app.configure('production', function() {
   app.set('db-uri', connStr);
 });
 
+console.log('connection string is ' + app.set('db-uri'));
 db = mongoose.connect(app.set('db-uri'));
 
 models.defineModels(mongoose, function () {
