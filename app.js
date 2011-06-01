@@ -9,8 +9,6 @@ var express = require('express'),
     utils = require('./utils.js'),
     db,
     Plan,
-//    Meal,
-//    Ingredient,
     Settings = { development: {}, test: {}, production: {}};
 
 var app = module.exports = express.createServer();
@@ -102,26 +100,33 @@ var updateDay = function (req, plan, day) {
     plan.meals.push(meal);
   } else {    
     meal.ingredients = [];
-    plan.save();
   }
 
-  meal.name = req.body[day].name;
+  plan.save(function (err) {
+    if(!err) {
+      meal.name = req.body[day].name;
 
-  if (req.body[day].ingredients.length > 0) {
-    var trimmed, flat_ingredients, split_ingredients;
-    trimmed = req.body[day].ingredients.trim();
-    flat_ingredients = trimmed.replace(/\r\n|\r|\n/gm, ',');
-    split_ingredients = flat_ingredients.split(',');
+      if (req.body[day].ingredients.length > 0) {
+        var trimmed, flat_ingredients, split_ingredients;
+        trimmed = req.body[day].ingredients.trim();
+        flat_ingredients = trimmed.replace(/\r\n|\r|\n/gm, ',');
+        split_ingredients = flat_ingredients.split(',');
 
-    split_ingredients.forEach(function (ingredient) {
-      if (ingredient.trim().length) {
-        meal.ingredients.push({
-          name: ingredient.trim()
+        split_ingredients.forEach(function (ingredient) {
+          if (ingredient.trim().length) {
+            meal.ingredients.push({
+              name: ingredient.trim()
+            });
+            //plan.save();
+          }
         });
-        plan.save();
-      }
-    });
-  }
+        plan.save(function (err) {
+          if(!err) { return; }
+        })
+      }      
+    }
+  });
+
 };
 
 app.post('/:id', function (req, res) {
