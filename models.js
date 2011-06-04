@@ -27,23 +27,24 @@ var defineModels = function (mongoose, fn) {
     });
   
   Plan.method('findMealByDay', function (day) {
-    var meal = null, i;
+    var meal, i;
     for(i = 0; i < this.meals.length; i += 1) {
       if (this.meals[i].day === day) {
         meal = this.meals[i];
         break;
-      }      
+      }
     }
     if (meal) {
-      return meal;  
+      return meal;
     } else {
       this.meals.push({
         day: day,
         name: '',
         ingredients: []
       });
+      var that = this;
       this.save(function (err) {
-        return this.findMealByDay(day);
+        return that.findMealByDay(day);
       });
     }    
   });
