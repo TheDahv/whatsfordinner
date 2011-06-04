@@ -34,7 +34,16 @@ var defineModels = function (mongoose, fn) {
         break;
       }      
     }
-    return meal;
+    if (meal) {
+      return meal;  
+    } else {
+      this.meals.push({
+        day: day
+      });
+      this.save(function (err) {
+        return this.findMealByDay(day);
+      });
+    }    
   });
   
   mongoose.model('Plan', Plan);
