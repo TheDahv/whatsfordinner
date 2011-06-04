@@ -38,7 +38,9 @@ var defineModels = function (mongoose, fn) {
       return meal;  
     } else {
       this.meals.push({
-        day: day
+        day: day,
+        name: '',
+        ingredients: []
       });
       this.save(function (err) {
         return this.findMealByDay(day);
