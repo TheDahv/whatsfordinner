@@ -4,6 +4,7 @@
  */
 
 var express = require('express'),
+    async = require('async'),
     mongoose = require('mongoose'),
     models = require('./models.js'),
     utils = require('./utils.js'),
@@ -90,62 +91,68 @@ app.get('/:id', function (req, res) {
   });
 });
 
-var updateDay = function (req, plan, day) {  
-  var meal = plan.findMealByDay(day);
-  if(meal === null) {
-    meal = {
-      day: day,
-      ingredients: []
-    };
-    plan.meals.push(meal);
-  } else {    
-    meal.ingredients = [];
-  }
-
-  plan.save(function (err) {
-    if(!err) {
-      meal.name = req.body[day].name;
-
-      if (req.body[day].ingredients.length > 0) {
-        var trimmed, flat_ingredients, split_ingredients;
-        trimmed = req.body[day].ingredients.trim();
-        flat_ingredients = trimmed.replace(/\r\n|\r|\n/gm, ',');
-        split_ingredients = flat_ingredients.split(',');
-
-        split_ingredients.forEach(function (ingredient) {
-          if (ingredient.trim().length) {
-            meal.ingredients.push({
-              name: ingredient.trim()
-            });
-            //plan.save();
-          }
-        });
-        plan.save(function (err) {
-          if(!err) { return; }
-        })
-      }      
-    }
-  });
-
-};
-
 app.post('/:id', function (req, res) {
-  var planid = req.params.id;
+  var planid = req.params.id;  
+  console.log('got id ' + planid);
 
-  
   Plan.findById(planid, function (err, plan) {
     if(err) {
       res.render('error', { locals: { error: err } });
     } else {
+      var processDay = (function (r, p) {
+        var req = r;
+        var plan = p;
+        
+        return function (day, callback) {
+          console.log('preparing ' + day);
+          console.log('  request is null? ' + (req === null));
+          console.log('  plan id is ' + plan.id);
+          
+          var meal = plan.findMealByDay(day);
+          meal.ingredients = [];
+          plan.save(function (err) {
+            if (err) { callback(err); }
+            console.log ('  meal for ' + day + ' is prepared. moving on...');
+            
+            meal.name = req.body[day].name;
+
+            console.log('  preparing to save ingredients for ' + day);
+            if (req.body[day].ingredients.length > 0) {
+              var ingredients = req.body[day].ingredients.trim().replace(/\r\r|\r|\n/gm, ',').split(',');
+              ingredients.forEach(function (i) {
+                if(i.trim().length) {
+                  meal.ingredients.push({
+                    name: i.trim()
+                  });
+                }                
+              });
+              plan.save(function (err) {
+                callback(err);
+              });
+            } else {
+              callback();
+            }              
+          });
+        };
+      }(req, plan));      
+
       // Update the existing plan
-      ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].forEach(
-        function (d) {
-          updateDay(req, plan, d); 
+      var days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    
+      async.forEachSeries(
+        days, 
+        processDay, 
+        function (err) {
+          if (err) {
+            res.render('error', {
+              locals: {error: err}
+            });
+          } else {
+            console.log('done');            
+            res.redirect('/' + plan.id);
+          }          
         }
-      );
-  
-      // Redirect back to the plan
-      res.redirect('/' + planid);      
+      );              
     }
   });  
 });
