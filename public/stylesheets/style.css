@@ -222,7 +222,7 @@ header {
 }
 .meal_day input,
 .ingredients_section input {
-  margin-top: 6.222px;
+  margin: 6.222px 0 3px 0;
   padding: 4px 2px;
   width: 140px;
   float: right;
@@ -230,6 +230,7 @@ header {
 }
 .meal_day textarea,
 .ingredients_section textarea {
+  float: right;
   overflow-y: hidden;
   width: 233px;
   height: 159.47px;
