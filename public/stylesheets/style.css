@@ -239,3 +239,6 @@ header {
 .meal_update {
   float: right;
 }
+#ingredients {
+  display: none;
+}
