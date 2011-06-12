@@ -3,7 +3,7 @@
     | Ok, we're almost ready to go! Share this link with anybody
     | with whom you'd like to plan your week. Click the link 
     | to get started.
-  p(style: 'text-align: center') 
+  p(style= 'text-align: center') 
     a(href = '/' + planid ) 
       | http://dinnerplanner.herokuapp.com/#{ planid }
 - else
@@ -16,6 +16,6 @@
       | To get started, click to generate a new
       | planner for your week. You will get a link
       | to share.
-    form(method: 'post', action='/')
-      input(type: 'submit', value: 'Start Planning!')  
+    form(method= 'post', action='/')
+      input(type= 'submit', value= 'Start Planning!')  
 
