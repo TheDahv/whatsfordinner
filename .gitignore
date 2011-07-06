@@ -2,3 +2,4 @@
 .nodemonignore
 node_modules
 pids
+public/stylesheets/style.css
