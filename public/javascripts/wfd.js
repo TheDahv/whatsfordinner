@@ -1,33 +1,45 @@
 var WFD = WFD || {};
 
 (function (window) {
-  var ctrlKey = 17,
-      sKey = 83,
-      cmdKey = 91, // for all you Mac people
-      ctrlPressed = false,
-      sPressed = false,
-      cmdPressed = false;
+    // Faye pubsub
+    var client = new Faye.Client('/pubsub');
 
-    // trigger save action
-    window.onkeydown = function (event) {        
-        switch (event.which) {
-            case ctrlKey: ctrlPressed = true; break;
-            case sKey: sPressed = true; break;
-            case cmdKey: cmdPressed = true; break;
+    var plan_id = document.location.pathname.split('/').slice(-1)[0];
+    if(plan_id.length) {
+      var channel = '/' + plan_id;
+      var subscription = client.subscribe(channel, function (message) {      
+        console.log(message);
+
+        if (message.error) {
+          // Display the error in some fancy way
+
+          return;
         }
-        if ((ctrlPressed || cmdPressed) && sPressed) { WFD.processSave(); event.preventDefault(); return false; }
-    };
-    window.onkeyup = function (event) {
-        switch (event.which) {
-            case ctrlKey: ctrlPressed = false; break;
-            case sKey: sPressed = false; break;
-            case cmdKey: cmdPressed = false; break;
+
+        if (message.target.indexOf('name') >= 0) {
+          $('input[name="'+ message.target + '"]').val(message.value);
+        } else if (message.target.indexOf('ingredients') >= 0) {
+          $('textarea[name="'+ message.target + '"]').val(message.value);          
         }
-    };
-    
-    // save action
-    WFD.processSave = function () { 
-      window.document.getElementById('meal_form').submit(); 
-      return;
-    };    
+      });
+      
+      $(function () {
+        if (client) {
+          // We don't need to have the save button available
+          // if we are doing automatic saves with pubsub
+          $('input.meal_update').remove();
+        }
+
+        $('input[type="text"], textarea').change(function (event) {          
+          var data_source = event.srcElement || event.currentTarget;
+          var data = {
+            plan_id: plan_id,
+            target: data_source.name,
+            value: data_source.value,
+            propogate: true
+          };
+          client.publish(channel, data);
+        });        
+      });
+    }
 }(window));

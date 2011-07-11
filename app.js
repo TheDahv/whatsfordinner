@@ -4,18 +4,17 @@
  */
 
 var express = require('express'),
+    app = module.exports = express.createServer(),
     async = require('async'),
     mongoose = require('mongoose'),
     models = require('./models.js'),
     utils = require('./utils.js'),
+    faye = require('faye'),
     db,
     Plan,
     Settings = { development: {}, test: {}, production: {}};
 
-var app = module.exports = express.createServer();
-
 // Configuration
-
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
@@ -50,7 +49,6 @@ app.configure('production', function() {
   app.set('db-uri', connStr);
 });
 
-console.log('connection string is ' + app.set('db-uri'));
 db = mongoose.connect(app.set('db-uri'));
 
 models.defineModels(mongoose, function () {
@@ -58,9 +56,8 @@ models.defineModels(mongoose, function () {
 });
 
 // Routes
-app.get('/:id', function (req, res) {
+app.get('/:id', function (req, res) {  
   var planid = req.params.id;
-  console.log('looking up the plan for id: ' + planid);
   
   Plan.findById(planid, function (err, plan) {
     if(err) {
@@ -96,7 +93,6 @@ app.get('/:id', function (req, res) {
 
 app.post('/:id', function (req, res) {
   var planid = req.params.id;  
-  console.log('got id ' + planid);
 
   Plan.findById(planid, function (err, plan) {
     if(err) {
@@ -106,20 +102,14 @@ app.post('/:id', function (req, res) {
         var req = r;
         var plan = p;
         
-        return function (day, callback) {
-          console.log('preparing ' + day);
-          console.log('  request is null? ' + (req === null));
-          console.log('  plan id is ' + plan.id);
-          
+        return function (day, callback) {          
           var meal = plan.findMealByDay(day);
           meal.ingredients = [];
           plan.save(function (err) {
             if (err) { callback(err); }
-            console.log ('  meal for ' + day + ' is prepared. moving on...');
             
             meal.name = req.body[day].name;
 
-            console.log('  preparing to save ingredients for ' + day);
             if (req.body[day].ingredients.length > 0) {
               var ingredients = req.body[day].ingredients.trim().replace(/\r\r|\r|\n/gm, ',').split(',');
               ingredients.forEach(function (i) {
@@ -151,7 +141,6 @@ app.post('/:id', function (req, res) {
               locals: {error: err}
             });
           } else {
-            console.log('done');            
             res.redirect('/' + plan.id);
           }          
         }
@@ -181,6 +170,78 @@ app.post('/', function (req, res) {
   });
 });
 
+var bayeux = new faye.NodeAdapter({
+  mount: '/pubsub',
+  timeout: 45
+});
+
+bayeux.attach(app);
+
 var port = process.env.PORT || 3000;
 app.listen(port);
 console.log("Express server listening on port %d", app.address().port);
+
+// PubSub stuff
+var pubsubError = function (err) {
+  bayeux.getClient().publish('/' + plan_id, {
+    error: err,
+    propogate: false
+  });  
+};
+
+bayeux.getClient().subscribe('/*', function (message) {
+  if (!message || message.propogate == false) {
+    return;
+  }
+
+  var saveAndPush = function (plan) {
+    plan.save(function (err) {
+      if (err) {
+        pubsubError(err);
+      } else {
+        // Push out to all subscribers
+        message.propogate = false;
+        bayeux.getClient().publish('/' + plan_id, message);          
+      }
+    });    
+  };
+
+  // Gather relevant data
+  var plan_id = message.plan_id,
+      day = message.target.split('[')[0],
+      target = message.target.split('[')[1].replace(/]/g,''),
+      value = message.value;
+  
+  // Persist the changes
+  Plan.findById(plan_id, function (err, plan) {
+    var meal, ingredients;
+
+    if (err) { 
+      pubsubError(err) 
+    } else {
+      meal = plan.findMealByDay(day);      
+      
+      if (target === 'name') {
+        meal.name = value;
+        saveAndPush(plan);
+      } else {
+        meal.ingredients = [];
+        plan.save(function (err) {          
+          if (err) {
+            pubsubError(err);
+          } else {
+            ingredients = value.trim().replace(/\r\r|\r|\n/gm, ',').split(',');
+            ingredients.forEach(function (i) {
+              if(i.trim().length) {
+                meal.ingredients.push({
+                  name: i.trim()
+                });
+              }
+            });
+            saveAndPush(plan);
+          }          
+        });
+      }
+    }
+  });
+});
