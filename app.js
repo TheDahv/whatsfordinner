@@ -56,6 +56,26 @@ models.defineModels(mongoose, function () {
 });
 
 // Routes
+
+// Some silly busy work. Turns out not having 
+// these special routes can crash the app
+// since anything off the root is considered
+// a plan ID
+app.get('/robots.txt', function (req, res) {
+  console.log('caught')
+  require('fs').readFile('robots.txt', function (err, data) {
+    if (!err) {
+      res.writeHead('200', {
+        type: 'text/plain'
+      });
+      res.write(data);
+      res.end();
+    }
+    
+  });
+  res.render('./robots.txt');
+});
+
 app.get('/:id', function (req, res) {  
   var planid = req.params.id;
   
