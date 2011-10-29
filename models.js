@@ -12,9 +12,17 @@ var defineModels = function (mongoose, fn) {
   });
 
   Meal = new Schema({
-    day         : String,
-    name        : String,
-    ingredients : [Ingredient]
+    day           : String,
+    name          : String,
+    ingredients   : [Ingredient],
+    date_created  : Date,
+    recipe        : String
+  });
+
+  Meal.pre('save', function (next) {
+    this.date_created = this.date_created || new Date();
+    
+    next();
   });
 
   Plan = new Schema({

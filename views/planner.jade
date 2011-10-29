@@ -7,12 +7,16 @@ section#meal_section
       section.meal_day
         h3 Monday
         input(type= 'text', placeholder= 'Dish', name= 'monday[name]', value= viewdata['monday'].name)
+        br        
+        input(type= 'text', placeholder= 'Recipe', name= 'monday[recipe]', value= viewdata['monday'].recipe).recipe
         br
         textarea(placeholder= 'Ingredients', name= 'monday[ingredients]')
           #{ viewdata['monday'].ingredients }
       section.meal_day
         h3 Tuesday
         input(type= 'text', placeholder= 'Dish', name= 'tuesday[name]', value= viewdata['tuesday'].name)
+        br        
+        input(type= 'text', placeholder= 'Recipe', name= 'tuesday[recipe]', value= viewdata['tuesday'].recipe).recipe
         br
         textarea(placeholder= 'Ingredients', name= 'tuesday[ingredients]')
           #{ viewdata['tuesday'].ingredients }
@@ -21,18 +25,24 @@ section#meal_section
       section.meal_day
         h3 Wednesday
         input(type= 'text', placeholder= 'Dish', name= 'wednesday[name]', value= viewdata['wednesday'].name)
+        br        
+        input(type= 'text', placeholder= 'Recipe', name= 'wednesday[recipe]', value= viewdata['wednesday'].recipe).recipe
         br
         textarea(placeholder= 'Ingredients', name= 'wednesday[ingredients]')
            #{ viewdata['wednesday'].ingredients }
       section.meal_day
         h3 Thursday
         input(type= 'text', placeholder= 'Dish', name= 'thursday[name]', value= viewdata['thursday'].name)
+        br        
+        input(type= 'text', placeholder= 'Recipe', name= 'thursday[recipe]', value= viewdata['thursday'].recipe).recipe
         br
         textarea(placeholder= 'Ingredients', name= 'thursday[ingredients]')
           #{ viewdata['thursday'].ingredients }
       section.meal_day
         h3 Friday
         input(type= 'text', placeholder= 'Dish', name= 'friday[name]', value= viewdata['friday'].name)
+        br        
+        input(type= 'text', placeholder= 'Recipe', name= 'friday[recipe]', value= viewdata['friday'].recipe).recipe
         br
         textarea(placeholder= 'Ingredients', name= 'friday[ingredients]')
           #{ viewdata['friday'].ingredients }
@@ -41,12 +51,16 @@ section#meal_section
       section.meal_day
         h3 Saturday
         input(type= 'text', placeholder= 'Dish', name= 'saturday[name]', value= viewdata['saturday'].name)
+        br        
+        input(type= 'text', placeholder= 'Recipe', name= 'saturday[recipe]', value= viewdata['saturday'].recipe).recipe
         br
         textarea(placeholder= 'Ingredients', name= 'saturday[ingredients]')
           #{ viewdata['saturday'].ingredients }
       section.meal_day
         h3 Sunday
         input(type= 'text', placeholder= 'Dish', name= 'sunday[name]', value= viewdata['sunday'].name)
+        br        
+        input(type= 'text', placeholder= 'Recipe', name= 'sunday[recipe]', value= viewdata['sunday'].recipe).recipe
         br
         textarea(placeholder= 'Ingredients', name= 'sunday[ingredients]')
           #{ viewdata['sunday'].ingredients }
