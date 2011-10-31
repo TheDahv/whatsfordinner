@@ -4,6 +4,7 @@
  */
 
 var express = require('express'),
+    http = require('http'),
     app = module.exports = express.createServer(),
     async = require('async'),
     mongoose = require('mongoose'),
@@ -12,7 +13,8 @@ var express = require('express'),
     faye = require('faye'),
     db,
     Plan,
-    Settings = { development: {}, test: {}, production: {}};
+    Settings = { development: {}, test: {}, production: {}},
+    pf_api = '12d4d28d4a74ff01';
 
 // Configuration
 app.configure(function(){
@@ -76,6 +78,43 @@ app.get('/robots.txt', function (req, res) {
   res.render('./robots.txt');
 });
 
+app.get('/pf/getRecipesByDish/:q', function (req, res) {
+  var options = {};
+  options.host = 'api.punchfork.com';
+  options.path = '/recipes?key=' + pf_api + '&q=' + req.params.q;
+  options.port = 80;
+  options.method = 'GET';
+
+  http.get(options, function(res) {    
+    res.on('data', function (data) {      
+      //console.log(JSON.parse(data.toString()));
+      console.log(data.toString());
+    });
+    console.log("Got response: " + res.statusCode);
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  });
+
+  // http.get(options, function (err, httpRes) {
+  //   console.log('starting the call');
+  //   httpRes.on('data', function (data) {
+  //     console.log('got a data response');
+  //     console.log(data);
+  //     var recipes = JSON.parse(recipes);
+
+  //     // do some stuff to recipes
+  //     console.log(recipes);      
+
+  //     // Send it back
+  //     res.writeHead(200, {
+  //       'Content-Type': 'application/json'
+  //     });
+
+  //     res.end(JSON.stringify(recipes));
+  //   });
+  // });
+});
+
 app.get('/:id', function (req, res) {  
   var planid = req.params.id;
   
@@ -129,6 +168,7 @@ app.post('/:id', function (req, res) {
             if (err) { callback(err); }
             
             meal.name = req.body[day].name;
+            meal.recipe = req.body[day].recipe;
 
             if (req.body[day].ingredients.length > 0) {
               var ingredients = req.body[day].ingredients.trim().replace(/\r\r|\r|\n/gm, ',').split(',');
@@ -243,6 +283,9 @@ bayeux.getClient().subscribe('/*', function (message) {
       
       if (target === 'name') {
         meal.name = value;
+        saveAndPush(plan);
+      } else if (target === 'recipe') {
+        meal.recipe = value;
         saveAndPush(plan);
       } else {
         meal.ingredients = [];

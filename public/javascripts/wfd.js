@@ -8,8 +8,6 @@ var WFD = WFD || {};
     if(plan_id.length) {
       var channel = '/' + plan_id;
       var subscription = client.subscribe(channel, function (message) {      
-        console.log(message);
-
         if (message.error) {
           // Display the error in some fancy way
 
@@ -18,6 +16,8 @@ var WFD = WFD || {};
 
         if (message.target.indexOf('name') >= 0) {
           $('input[name="'+ message.target + '"]').val(message.value);
+        } else if (message.target.indexOf('recipe') >= 0) {
+          $('input[name="' + message.target + '"]').val(message.value);
         } else if (message.target.indexOf('ingredients') >= 0) {
           $('textarea[name="'+ message.target + '"]').val(message.value);          
         }
@@ -39,6 +39,12 @@ var WFD = WFD || {};
             propogate: true
           };
           client.publish(channel, data);
+
+          // After saving, also get some PunchFork recipe suggestions
+          console.log('calling to /pf/getRecipesByDish/' + data_source.value);
+          $.get('/pf/getRecipesByDish/' + data_source.value, function (data) {
+            console.log(data);
+          });          
         });        
       });
     }
