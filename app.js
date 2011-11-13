@@ -87,7 +87,6 @@ app.get('/pf/getRecipesByDish/:q', function (req, res) {
 
   http.get(options, function(res) {    
     res.on('data', function (data) {      
-      //console.log(JSON.parse(data.toString()));
       console.log(data.toString());
     });
     console.log("Got response: " + res.statusCode);
