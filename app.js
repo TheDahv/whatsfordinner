@@ -172,7 +172,7 @@ app.post('/:id', function (req, res) {
             meal.recipe = req.body[day].recipe;
 
             if (req.body[day].ingredients.length > 0) {
-              var ingredients = req.body[day].ingredients.trim().replace(/\r\r|\r|\n/gm, ',').split(',');
+              var ingredients = req.body[day].ingredients.trim().replace(/\r\n|\r|\n/gm, ',').split(',');
               ingredients.forEach(function (i) {
                 if(i.trim().length) {
                   meal.ingredients.push({
@@ -294,7 +294,7 @@ bayeux.getClient().subscribe('/*', function (message) {
           if (err) {
             pubsubError(err);
           } else {
-            ingredients = value.trim().replace(/\r\r|\r|\n/gm, ',').split(',');
+            ingredients = value.trim().replace(/\r\n|\r|\n/gm, ',').split(',');
             ingredients.forEach(function (i) {
               if(i.trim().length) {
                 meal.ingredients.push({
