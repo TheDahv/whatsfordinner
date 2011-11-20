@@ -128,6 +128,7 @@ app.get('/:id', function (req, res) {
       ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].forEach(function (d) {
         var meal = plan.findMealByDay(d);
         var name = meal === undefined ? '' : meal.name;
+        var recipe = meal === undefined ? '' : meal.recipe;
         var ingredients = '';
         if (meal !== undefined && meal.ingredients.length > 0) {
           ingredients = meal.ingredients.map(function (i) { return i.name; }).join(', ');
@@ -135,6 +136,7 @@ app.get('/:id', function (req, res) {
               
         viewdata[d] = {
           name: name,
+          recipe: recipe,
           ingredients: ingredients
         };
       });
