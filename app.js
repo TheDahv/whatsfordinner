@@ -14,7 +14,7 @@ var express = require('express'),
     db,
     Plan,
     Settings = { development: {}, test: {}, production: {}},
-    pf_api = '12d4d28d4a74ff01';
+    pf_api = '27ca1f77f6945602';
 
 // Configuration
 app.configure(function(){
@@ -73,7 +73,6 @@ app.get('/robots.txt', function (req, res) {
       res.write(data);
       res.end();
     }
-    
   });
   res.render('./robots.txt');
 });
@@ -85,33 +84,22 @@ app.get('/pf/getRecipesByDish/:q', function (req, res) {
   options.port = 80;
   options.method = 'GET';
 
-  http.get(options, function(res) {    
-    res.on('data', function (data) {      
-      console.log(data.toString());
+  http.get(options, function(pf_res) {    
+    var res_str = '';
+    pf_res.on('data', function (data) {      
+      res_str += data;
     });
-    console.log("Got response: " + res.statusCode);
+
+    pf_res.on('end', function () {
+      console.log(res_str.toString());
+      console.log("Got response: " + pf_res.statusCode);
+    });
   }).on('error', function(e) {
     console.log("Got error: " + e.message);
   });
 
-  // http.get(options, function (err, httpRes) {
-  //   console.log('starting the call');
-  //   httpRes.on('data', function (data) {
-  //     console.log('got a data response');
-  //     console.log(data);
-  //     var recipes = JSON.parse(recipes);
-
-  //     // do some stuff to recipes
-  //     console.log(recipes);      
-
-  //     // Send it back
-  //     res.writeHead(200, {
-  //       'Content-Type': 'application/json'
-  //     });
-
-  //     res.end(JSON.stringify(recipes));
-  //   });
-  // });
+  res.writeHead(200, { type: 'text/plain' });
+  res.end('OK');
 });
 
 app.get('/:id', function (req, res) {  
