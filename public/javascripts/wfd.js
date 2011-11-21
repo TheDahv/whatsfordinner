@@ -22,7 +22,7 @@ var WFD = WFD || {};
         $('textarea[name="'+ message.target + '"]').val(message.value);          
       }
     });
-    
+
     $(function () {
       if (client) {
         // We don't need to have the save button available
@@ -47,39 +47,11 @@ var WFD = WFD || {};
         });          
       });        
 
-      $('#get_shopping_list').click(function () {
-        var print_div,meal,meal_title,i,ingredient_length,ingredient_array=[],ul_ref;
-        
-        if($('#print_list')){
-          $('#print_list').remove();
-        };
-
-        print_div = $('<div />', { id : 'print_list' }).
-          css('background-color', '#fff').
-          css('height', 'auto').
-          css('width', '600px');
-
-        print_div.appendTo('#main');
-
-        $('.meal_day').each(function (i,el) {
-          meal = $(el);
-          meal_title = meal.find('input').val();
-          ingredient_array = meal.find('textarea').val().split(',');
-          $('<h3 />').text(meal_title).appendTo(print_div);
-          ingredient_length = ingredient_array.length;
-          i=0;
-          ul_ref=$('<ul />');
-          for(;i<ingredient_length;i+=1){
-            $('<li />').text(ingredient_array[i]).css('margin-left','10px').appendTo(ul_ref);
-          }
-          ul_ref.appendTo(print_div);
-        });
-      });
-
       $('#generate_print_sheet').click(function () {
         var print_div,
             meal,
             meal_title,
+            meal_recipe,
             i,
             ingredient_length,
             ingredient_array=[],
@@ -94,9 +66,11 @@ var WFD = WFD || {};
 
         $('.meal_day').each(function (i,el) {
           meal = $(el);
-          meal_title = meal.find('input').val();
+          meal_title = $(meal.find('input')[0]).val();
+          meal_recipe = $(meal.find('input')[1]).val();
           ingredient_array = meal.find('textarea').val().split(',');
-          $('<h3 />').text(meal_title).appendTo(print_div);
+          
+          $('<h3 />').text(meal_title + (meal_recipe ? ' - ' + meal_recipe : '')).appendTo(print_div);
 
           ingredient_length = ingredient_array.length;
           i = 0;
@@ -106,6 +80,8 @@ var WFD = WFD || {};
           }
           ul_ref.appendTo(print_div);
         });
+        $('html,body').animate({ scrollTop: $(document).height() }, 'slow');
+        return false;
       });
     });
   }
