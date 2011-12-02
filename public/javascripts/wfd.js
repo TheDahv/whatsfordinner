@@ -1,6 +1,8 @@
 var WFD = WFD || {};
 
 (function (window) {
+  var browser_identifier = '';
+  
   // Faye pubsub
   var client = new Faye.Client('/pubsub');
 
@@ -14,6 +16,16 @@ var WFD = WFD || {};
         return;
       }
 
+      if (message.chat) {
+        if (message.propogate === false && message.browser_identifier !== browser_identifier) {
+          var msg = message.chat.message;
+          var chat_window = $('#chat ul');
+          chat_window.append($('<li />').text('> ' + msg));
+          $('#chat div').scrollTop(9999);
+        }
+        return;
+      }
+
       if (message.target.indexOf('name') >= 0) {
         $('input[name="'+ message.target + '"]').val(message.value);
       } else if (message.target.indexOf('recipe') >= 0) {
@@ -24,13 +36,15 @@ var WFD = WFD || {};
     });
 
     $(function () {
+      $('#chat').show();
       if (client) {
         // We don't need to have the save button available
         // if we are doing automatic saves with pubsub
         $('input.meal_update').remove();
       }
 
-      $('input[type="text"], textarea').change(function (event) {          
+      // Watch for changes on user input
+      $('#main input[type="text"], #main textarea').change(function (event) {          
         var data_source = event.srcElement || event.currentTarget;
         var data = {
           plan_id: plan_id,
@@ -41,12 +55,12 @@ var WFD = WFD || {};
         client.publish(channel, data);
 
         // After saving, also get some PunchFork recipe suggestions
-        console.log('calling to /pf/getRecipesByDish/' + data_source.value);
         $.get('/pf/getRecipesByDish/' + data_source.value, function (data) {
-          console.log(data);
+          // console.log(data);
         });          
       });        
 
+      // Set up shopping list generator
       $('#generate_print_sheet').click(function () {
         var print_div,
             meal,
@@ -82,6 +96,31 @@ var WFD = WFD || {};
         });
         $('html,body').animate({ scrollTop: $(document).height() }, 'slow');
         return false;
+      });
+
+      // Set up chat 
+      $.get('/randomIdentifier', function (r_id) {
+        browser_identifier = r_id;
+      });
+
+      var chat_area = $('#chat ul');
+      $('#chat_input').keydown(function (e) {
+        var msg;
+        if (e.which === 13) {
+          msg = $(this).val();
+          client.publish(channel, {
+            browser_identifier: browser_identifier,
+            plan_id: plan_id,
+            propogate: true,
+            chat: {
+              message: msg     
+            }
+          });
+          
+          chat_area.append($('<li />').text(msg));
+          $('#chat div').scrollTop(9999);
+          $(this).val(''); 
+        }
       });
     });
   }

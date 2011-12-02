@@ -9,8 +9,8 @@ var express = require('express'),
     async = require('async'),
     mongoose = require('mongoose'),
     models = require('./models.js'),
-    utils = require('./utils.js'),
     faye = require('faye'),
+    uuid = require('node-uuid'),
     db,
     Plan,
     Settings = { development: {}, test: {}, production: {}},
@@ -64,7 +64,6 @@ models.defineModels(mongoose, function () {
 // since anything off the root is considered
 // a plan ID
 app.get('/robots.txt', function (req, res) {
-  console.log('caught')
   require('fs').readFile('robots.txt', function (err, data) {
     if (!err) {
       res.writeHead('200', {
@@ -98,15 +97,21 @@ app.get('/pf/getRecipesByDish/:q', function (req, res) {
     console.log("Got error: " + e.message);
   });
 
-  res.writeHead(200, { type: 'text/plain' });
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
   res.end('OK');
+});
+
+app.get('/randomIdentifier', function (req, res) {
+  var id = uuid.v4();
+  res.writeHead(200, { 'Content-Type': 'text/plain'});
+  res.end(id);
 });
 
 app.get('/:id', function (req, res) {  
   var planid = req.params.id;
   
   Plan.findById(planid, function (err, plan) {
-    if(err) {
+    if (err) {
       res.render('error', {
         locals: { error: err }
       });
@@ -240,6 +245,18 @@ var pubsubError = function (err) {
 
 bayeux.getClient().subscribe('/*', function (message) {
   if (!message || message.propogate == false) {
+    return;
+  }
+
+  if (message && message.chat) {
+    if (message.propogate) {
+      var plan_id = message.plan_id,
+          payload = _.extend(message);
+
+      payload.propogate = false;
+      // Push out to other subscribers
+      bayeux.getClient().publish('/' + plan_id, payload);
+    }
     return;
   }
 

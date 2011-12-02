@@ -177,8 +177,50 @@ header
 
 // Print stuff
 #generate_print_sheet
-    float right
+  float right
 
 // Hide ingredients until this feature works
 #ingredients
   display none
+
+#chat 
+  transition margin-bottom 1s
+  -moz-transition margin-bottom 1s
+  -webkit-transition margin-bottom 1s
+  -o-transition margin-bottom 1s
+
+#chat:hover 
+  margin-bottom 0
+
+#chat
+  background-color white
+  padding-top 0
+  margin-bottom -170px
+  display none
+  font-size 14px
+  height 200px
+  position fixed
+  bottom 0px
+  left 0
+  width 100%
+
+  div 
+    overflow-y auto
+    width 80%
+    margin 0 auto
+    height 140px
+  
+  input[type='text']
+    border 1px solid #000
+    width 80%
+
+  p
+    margin 0
+    padding 8px 0
+    background-color yellow
+  ul 
+    text-align left
+    background-color #fff
+    width 100%
+  li 
+    margin 8px 0
