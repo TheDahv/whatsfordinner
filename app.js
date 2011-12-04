@@ -66,14 +66,15 @@ models.defineModels(mongoose, function () {
 app.get('/robots.txt', function (req, res) {
   require('fs').readFile('robots.txt', function (err, data) {
     if (!err) {
-      res.writeHead('200', {
-        type: 'text/plain'
-      });
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
       res.write(data);
+      res.end();
+    } else {
+      res.writeHead(500, { 'Content-Type': 'text/plain'});
+      res.write('robots.txt error');
       res.end();
     }
   });
-  res.render('./robots.txt');
 });
 
 app.get('/pf/getRecipesByDish/:q', function (req, res) {
