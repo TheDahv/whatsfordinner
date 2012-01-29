@@ -23,7 +23,7 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(require('stylus').middleware({ src: __dirname + '/public' }));
-  app.use(express.favicon(__dirname + '/public/placeholder.ico'));
+  app.use(express.favicon(__dirname + '/public/favicon.ico'));
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
